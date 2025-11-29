@@ -58,6 +58,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Serve static files from wwwroot
+app.UseStaticFiles();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -1,5 +1,5 @@
 ﻿using CoolBottlesAPI.Data;
-using CoolBottlesAPI.Models;
+using CoolBottlesAPI.Models.DB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +39,24 @@ namespace CoolBottlesAPI.Controllers
             _db.Bottles.Remove(bottle);
             await _db.SaveChangesAsync();
             return Ok();
+        }
+
+        // Admin: Update bottle
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateBottle(int id, Bottle updatedBottle)
+        {
+            var bottle = await _db.Bottles.FindAsync(id);
+            if (bottle == null) return NotFound();
+
+            bottle.Name = updatedBottle.Name;
+            bottle.Description = updatedBottle.Description;
+            bottle.Price = updatedBottle.Price;
+            bottle.Amount = updatedBottle.Amount;
+            bottle.ImageUrl = updatedBottle.ImageUrl;
+
+            await _db.SaveChangesAsync();
+            return Ok(bottle);
         }
     }
 }
